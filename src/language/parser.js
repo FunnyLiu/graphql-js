@@ -113,6 +113,7 @@ export function parse(
   source: string | Source,
   options?: ParseOptions,
 ): DocumentNode {
+  //gql函数基于此解析字符串
   const parser = new Parser(source, options);
   return parser.parseDocument();
 }

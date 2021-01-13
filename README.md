@@ -1,3 +1,465 @@
+
+# 源码分析
+
+## 文件结构
+
+``` bash
+/Users/liufang/openSource/FunnyLiu/graphql-js
+├── integrationTests
+|  ├── README.md
+|  ├── flow
+|  |  ├── index.mjs
+|  |  └── package.json
+|  ├── integration-test.js
+|  ├── node
+|  |  ├── index.js
+|  |  ├── package.json
+|  |  └── test.js
+|  └── ts
+|     ├── index.ts
+|     ├── package.json
+|     ├── test.js
+|     └── tsconfig.json
+├── resources
+|  ├── add-extension-to-import-paths.js
+|  ├── build-deno.js
+|  ├── build-npm.js
+|  ├── check-cycles.js
+|  ├── checkgit.sh
+|  ├── eslint-internal-rules
+|  |  ├── README.md
+|  |  ├── index.js
+|  |  ├── no-dir-import.js
+|  |  └── package.json
+|  ├── gen-changelog.js
+|  ├── gen-version.js
+|  ├── gitpublish.sh
+|  ├── inline-invariant.js
+|  └── utils.js
+├── src
+|  ├── README.md
+|  ├── __testUtils__
+|  |  ├── __tests__
+|  |  |  ├── dedent-test.js
+|  |  |  ├── genFuzzStrings-test.js
+|  |  |  ├── inspectStr-test.js
+|  |  |  └── resolveOnNextTick-test.js
+|  |  ├── dedent.js
+|  |  ├── genFuzzStrings.js
+|  |  ├── inspectStr.js
+|  |  ├── kitchenSinkQuery.js
+|  |  ├── kitchenSinkSDL.js
+|  |  └── resolveOnNextTick.js
+|  ├── __tests__
+|  |  ├── starWarsData.js
+|  |  ├── starWarsIntrospection-test.js
+|  |  ├── starWarsQuery-test.js
+|  |  ├── starWarsSchema.js
+|  |  ├── starWarsValidation-test.js
+|  |  └── version-test.js
+|  ├── error
+|  |  ├── GraphQLError.d.ts
+|  |  ├── GraphQLError.js
+|  |  ├── README.md
+|  |  ├── __tests__
+|  |  |  ├── GraphQLError-test.js
+|  |  |  ├── formatError-test.js
+|  |  |  └── locatedError-test.js
+|  |  ├── formatError.d.ts
+|  |  ├── formatError.js
+|  |  ├── index.d.ts
+|  |  ├── index.js
+|  |  ├── locatedError.d.ts
+|  |  ├── locatedError.js
+|  |  ├── syntaxError.d.ts
+|  |  └── syntaxError.js
+|  ├── execution
+|  |  ├── README.md
+|  |  ├── __tests__
+|  |  |  ├── abstract-test.js
+|  |  |  ├── directives-test.js
+|  |  |  ├── executor-test.js
+|  |  |  ├── lists-test.js
+|  |  |  ├── mutations-test.js
+|  |  |  ├── nonnull-test.js
+|  |  |  ├── resolve-test.js
+|  |  |  ├── schema-test.js
+|  |  |  ├── sync-test.js
+|  |  |  ├── union-interface-test.js
+|  |  |  └── variables-test.js
+|  |  ├── execute.d.ts
+|  |  ├── execute.js
+|  |  ├── index.d.ts
+|  |  ├── index.js
+|  |  ├── values.d.ts
+|  |  └── values.js
+|  ├── graphql.d.ts
+|  ├── graphql.js
+|  ├── index.d.ts
+|  ├── index.js
+|  ├── jsutils
+|  |  ├── Maybe.d.ts
+|  |  ├── ObjMap.js
+|  |  ├── Path.d.ts
+|  |  ├── Path.js
+|  |  ├── PromiseOrValue.d.ts
+|  |  ├── PromiseOrValue.js
+|  |  ├── README.md
+|  |  ├── __tests__
+|  |  |  ├── didYouMean-test.js
+|  |  |  ├── identityFunc-test.js
+|  |  |  ├── inspect-test.js
+|  |  |  ├── instanceOf-test.js
+|  |  |  ├── invariant-test.js
+|  |  |  ├── isAsyncIterable-test.js
+|  |  |  ├── isCollection-test.js
+|  |  |  ├── isObjectLike-test.js
+|  |  |  ├── suggestionList-test.js
+|  |  |  └── toObjMap-test.js
+|  |  ├── defineInspect.js
+|  |  ├── devAssert.js
+|  |  ├── didYouMean.js
+|  |  ├── identityFunc.js
+|  |  ├── inspect.js
+|  |  ├── instanceOf.js
+|  |  ├── invariant.js
+|  |  ├── isAsyncIterable.js
+|  |  ├── isCollection.js
+|  |  ├── isObjectLike.js
+|  |  ├── isPromise.js
+|  |  ├── keyMap.js
+|  |  ├── keyValMap.js
+|  |  ├── mapValue.js
+|  |  ├── memoize3.js
+|  |  ├── nodejsCustomInspectSymbol.js
+|  |  ├── printPathArray.js
+|  |  ├── promiseForObject.js
+|  |  ├── promiseReduce.js
+|  |  ├── suggestionList.js
+|  |  └── toObjMap.js
+|  ├── language
+|  |  ├── README.md
+|  |  ├── __tests__
+|  |  |  ├── blockString-fuzz.js
+|  |  |  ├── blockString-test.js
+|  |  |  ├── lexer-test.js
+|  |  |  ├── parser-test.js
+|  |  |  ├── predicates-test.js
+|  |  |  ├── printLocation-test.js
+|  |  |  ├── printer-test.js
+|  |  |  ├── schema-parser-test.js
+|  |  |  ├── schema-printer-test.js
+|  |  |  ├── source-test.js
+|  |  |  ├── toJSONDeep.js
+|  |  |  └── visitor-test.js
+|  |  ├── ast.d.ts
+|  |  ├── ast.js
+|  |  ├── blockString.d.ts
+|  |  ├── blockString.js
+|  |  ├── directiveLocation.d.ts
+|  |  ├── directiveLocation.js
+|  |  ├── experimentalOnlineParser
+|  |  |  ├── README.md
+|  |  |  ├── grammar.d.ts
+|  |  |  ├── grammar.js
+|  |  |  ├── index.d.ts
+|  |  |  ├── index.js
+|  |  |  ├── onlineParser.d.ts
+|  |  |  └── onlineParser.js
+|  |  ├── index.d.ts
+|  |  ├── index.js
+|  |  ├── kinds.d.ts
+|  |  ├── kinds.js
+|  |  ├── lexer.d.ts
+|  |  ├── lexer.js
+|  |  ├── location.d.ts
+|  |  ├── location.js
+|  |  ├── parser.d.ts
+|  |  ├── parser.js - gql解析语法的逻辑所在
+|  |  ├── predicates.d.ts
+|  |  ├── predicates.js
+|  |  ├── printLocation.d.ts
+|  |  ├── printLocation.js
+|  |  ├── printer.d.ts
+|  |  ├── printer.js
+|  |  ├── source.d.ts
+|  |  ├── source.js
+|  |  ├── tokenKind.d.ts
+|  |  ├── tokenKind.js
+|  |  ├── visitor.d.ts
+|  |  └── visitor.js
+|  ├── polyfills
+|  |  ├── README.md
+|  |  ├── arrayFrom.js
+|  |  ├── find.js
+|  |  ├── isFinite.js
+|  |  ├── isInteger.js
+|  |  ├── objectEntries.js
+|  |  ├── objectValues.js
+|  |  └── symbols.js
+|  ├── subscription
+|  |  ├── README.md
+|  |  ├── __tests__
+|  |  |  ├── mapAsyncIterator-test.js
+|  |  |  ├── simplePubSub-test.js
+|  |  |  ├── simplePubSub.js
+|  |  |  └── subscribe-test.js
+|  |  ├── index.d.ts
+|  |  ├── index.js
+|  |  ├── mapAsyncIterator.d.ts
+|  |  ├── mapAsyncIterator.js
+|  |  ├── subscribe.d.ts
+|  |  └── subscribe.js
+|  ├── type
+|  |  ├── README.md
+|  |  ├── __tests__
+|  |  |  ├── definition-test.js
+|  |  |  ├── directive-test.js
+|  |  |  ├── enumType-test.js
+|  |  |  ├── extensions-test.js
+|  |  |  ├── introspection-test.js
+|  |  |  ├── predicate-test.js
+|  |  |  ├── scalars-test.js
+|  |  |  ├── schema-test.js
+|  |  |  └── validation-test.js
+|  |  ├── definition.d.ts
+|  |  ├── definition.js
+|  |  ├── directives.d.ts
+|  |  ├── directives.js
+|  |  ├── index.d.ts
+|  |  ├── index.js
+|  |  ├── introspection.d.ts
+|  |  ├── introspection.js
+|  |  ├── scalars.d.ts
+|  |  ├── scalars.js
+|  |  ├── schema.d.ts
+|  |  ├── schema.js
+|  |  ├── validate.d.ts
+|  |  └── validate.js
+|  ├── utilities
+|  |  ├── README.md
+|  |  ├── TypeInfo.d.ts
+|  |  ├── TypeInfo.js
+|  |  ├── __tests__
+|  |  |  ├── TypeInfo-test.js
+|  |  |  ├── assertValidName-test.js
+|  |  |  ├── astFromValue-test.js
+|  |  |  ├── buildASTSchema-test.js
+|  |  |  ├── buildClientSchema-test.js
+|  |  |  ├── coerceInputValue-test.js
+|  |  |  ├── concatAST-test.js
+|  |  |  ├── extendSchema-test.js
+|  |  |  ├── findBreakingChanges-test.js
+|  |  |  ├── getIntrospectionQuery-test.js
+|  |  |  ├── getOperationAST-test.js
+|  |  |  ├── getOperationRootType-test.js
+|  |  |  ├── introspectionFromSchema-test.js
+|  |  |  ├── lexicographicSortSchema-test.js
+|  |  |  ├── printSchema-test.js
+|  |  |  ├── separateOperations-test.js
+|  |  |  ├── stripIgnoredCharacters-fuzz.js
+|  |  |  ├── stripIgnoredCharacters-test.js
+|  |  |  ├── typeComparators-test.js
+|  |  |  ├── valueFromAST-test.js
+|  |  |  └── valueFromASTUntyped-test.js
+|  |  ├── assertValidName.d.ts
+|  |  ├── assertValidName.js
+|  |  ├── astFromValue.d.ts
+|  |  ├── astFromValue.js
+|  |  ├── buildASTSchema.d.ts
+|  |  ├── buildASTSchema.js
+|  |  ├── buildClientSchema.d.ts
+|  |  ├── buildClientSchema.js
+|  |  ├── coerceInputValue.d.ts
+|  |  ├── coerceInputValue.js
+|  |  ├── concatAST.d.ts
+|  |  ├── concatAST.js
+|  |  ├── extendSchema.d.ts
+|  |  ├── extendSchema.js
+|  |  ├── findBreakingChanges.d.ts
+|  |  ├── findBreakingChanges.js
+|  |  ├── findDeprecatedUsages.d.ts
+|  |  ├── findDeprecatedUsages.js
+|  |  ├── getIntrospectionQuery.d.ts
+|  |  ├── getIntrospectionQuery.js
+|  |  ├── getOperationAST.d.ts
+|  |  ├── getOperationAST.js
+|  |  ├── getOperationRootType.d.ts
+|  |  ├── getOperationRootType.js
+|  |  ├── index.d.ts
+|  |  ├── index.js
+|  |  ├── introspectionFromSchema.d.ts
+|  |  ├── introspectionFromSchema.js
+|  |  ├── lexicographicSortSchema.d.ts
+|  |  ├── lexicographicSortSchema.js
+|  |  ├── printSchema.d.ts
+|  |  ├── printSchema.js
+|  |  ├── separateOperations.d.ts
+|  |  ├── separateOperations.js
+|  |  ├── stripIgnoredCharacters.d.ts
+|  |  ├── stripIgnoredCharacters.js
+|  |  ├── typeComparators.d.ts
+|  |  ├── typeComparators.js
+|  |  ├── typeFromAST.d.ts
+|  |  ├── typeFromAST.js
+|  |  ├── typedQueryDocumentNode.d.ts
+|  |  ├── valueFromAST.d.ts
+|  |  ├── valueFromAST.js
+|  |  ├── valueFromASTUntyped.d.ts
+|  |  └── valueFromASTUntyped.js
+|  ├── validation
+|  |  ├── README.md
+|  |  ├── ValidationContext.d.ts
+|  |  ├── ValidationContext.js
+|  |  ├── __tests__
+|  |  |  ├── ExecutableDefinitionsRule-test.js
+|  |  |  ├── FieldsOnCorrectTypeRule-test.js
+|  |  |  ├── FragmentsOnCompositeTypesRule-test.js
+|  |  |  ├── KnownArgumentNamesRule-test.js
+|  |  |  ├── KnownDirectivesRule-test.js
+|  |  |  ├── KnownFragmentNamesRule-test.js
+|  |  |  ├── KnownTypeNamesRule-test.js
+|  |  |  ├── LoneAnonymousOperationRule-test.js
+|  |  |  ├── LoneSchemaDefinitionRule-test.js
+|  |  |  ├── NoDeprecatedCustomRule-test.js
+|  |  |  ├── NoFragmentCyclesRule-test.js
+|  |  |  ├── NoSchemaIntrospectionCustomRule-test.js
+|  |  |  ├── NoUndefinedVariablesRule-test.js
+|  |  |  ├── NoUnusedFragmentsRule-test.js
+|  |  |  ├── NoUnusedVariablesRule-test.js
+|  |  |  ├── OverlappingFieldsCanBeMergedRule-test.js
+|  |  |  ├── PossibleFragmentSpreadsRule-test.js
+|  |  |  ├── PossibleTypeExtensionsRule-test.js
+|  |  |  ├── ProvidedRequiredArgumentsRule-test.js
+|  |  |  ├── ScalarLeafsRule-test.js
+|  |  |  ├── SingleFieldSubscriptionsRule-test.js
+|  |  |  ├── UniqueArgumentNamesRule-test.js
+|  |  |  ├── UniqueDirectiveNamesRule-test.js
+|  |  |  ├── UniqueDirectivesPerLocationRule-test.js
+|  |  |  ├── UniqueEnumValueNamesRule-test.js
+|  |  |  ├── UniqueFieldDefinitionNamesRule-test.js
+|  |  |  ├── UniqueFragmentNamesRule-test.js
+|  |  |  ├── UniqueInputFieldNamesRule-test.js
+|  |  |  ├── UniqueOperationNamesRule-test.js
+|  |  |  ├── UniqueOperationTypesRule-test.js
+|  |  |  ├── UniqueTypeNamesRule-test.js
+|  |  |  ├── UniqueVariableNamesRule-test.js
+|  |  |  ├── ValuesOfCorrectTypeRule-test.js
+|  |  |  ├── VariablesAreInputTypesRule-test.js
+|  |  |  ├── VariablesInAllowedPositionRule-test.js
+|  |  |  ├── harness.js
+|  |  |  └── validation-test.js
+|  |  ├── index.d.ts
+|  |  ├── index.js
+|  |  ├── rules
+|  |  |  ├── ExecutableDefinitions.d.ts
+|  |  |  ├── ExecutableDefinitions.js
+|  |  |  ├── ExecutableDefinitionsRule.d.ts
+|  |  |  ├── ExecutableDefinitionsRule.js
+|  |  |  ├── FieldsOnCorrectTypeRule.d.ts
+|  |  |  ├── FieldsOnCorrectTypeRule.js
+|  |  |  ├── FragmentsOnCompositeTypesRule.d.ts
+|  |  |  ├── FragmentsOnCompositeTypesRule.js
+|  |  |  ├── KnownArgumentNamesRule.d.ts
+|  |  |  ├── KnownArgumentNamesRule.js
+|  |  |  ├── KnownDirectivesRule.d.ts
+|  |  |  ├── KnownDirectivesRule.js
+|  |  |  ├── KnownFragmentNamesRule.d.ts
+|  |  |  ├── KnownFragmentNamesRule.js
+|  |  |  ├── KnownTypeNamesRule.d.ts
+|  |  |  ├── KnownTypeNamesRule.js
+|  |  |  ├── LoneAnonymousOperationRule.d.ts
+|  |  |  ├── LoneAnonymousOperationRule.js
+|  |  |  ├── LoneSchemaDefinition.d.ts
+|  |  |  ├── LoneSchemaDefinition.js
+|  |  |  ├── LoneSchemaDefinitionRule.d.ts
+|  |  |  ├── LoneSchemaDefinitionRule.js
+|  |  |  ├── NoFragmentCyclesRule.d.ts
+|  |  |  ├── NoFragmentCyclesRule.js
+|  |  |  ├── NoUndefinedVariablesRule.d.ts
+|  |  |  ├── NoUndefinedVariablesRule.js
+|  |  |  ├── NoUnusedFragmentsRule.d.ts
+|  |  |  ├── NoUnusedFragmentsRule.js
+|  |  |  ├── NoUnusedVariablesRule.d.ts
+|  |  |  ├── NoUnusedVariablesRule.js
+|  |  |  ├── OverlappingFieldsCanBeMergedRule.d.ts
+|  |  |  ├── OverlappingFieldsCanBeMergedRule.js
+|  |  |  ├── PossibleFragmentSpreadsRule.d.ts
+|  |  |  ├── PossibleFragmentSpreadsRule.js
+|  |  |  ├── PossibleTypeExtensions.d.ts
+|  |  |  ├── PossibleTypeExtensions.js
+|  |  |  ├── PossibleTypeExtensionsRule.d.ts
+|  |  |  ├── PossibleTypeExtensionsRule.js
+|  |  |  ├── ProvidedRequiredArgumentsRule.d.ts
+|  |  |  ├── ProvidedRequiredArgumentsRule.js
+|  |  |  ├── ScalarLeafsRule.d.ts
+|  |  |  ├── ScalarLeafsRule.js
+|  |  |  ├── SingleFieldSubscriptionsRule.d.ts
+|  |  |  ├── SingleFieldSubscriptionsRule.js
+|  |  |  ├── UniqueArgumentNamesRule.d.ts
+|  |  |  ├── UniqueArgumentNamesRule.js
+|  |  |  ├── UniqueDirectiveNames.d.ts
+|  |  |  ├── UniqueDirectiveNames.js
+|  |  |  ├── UniqueDirectiveNamesRule.d.ts
+|  |  |  ├── UniqueDirectiveNamesRule.js
+|  |  |  ├── UniqueDirectivesPerLocationRule.d.ts
+|  |  |  ├── UniqueDirectivesPerLocationRule.js
+|  |  |  ├── UniqueEnumValueNames.d.ts
+|  |  |  ├── UniqueEnumValueNames.js
+|  |  |  ├── UniqueEnumValueNamesRule.d.ts
+|  |  |  ├── UniqueEnumValueNamesRule.js
+|  |  |  ├── UniqueFieldDefinitionNames.d.ts
+|  |  |  ├── UniqueFieldDefinitionNames.js
+|  |  |  ├── UniqueFieldDefinitionNamesRule.d.ts
+|  |  |  ├── UniqueFieldDefinitionNamesRule.js
+|  |  |  ├── UniqueFragmentNamesRule.d.ts
+|  |  |  ├── UniqueFragmentNamesRule.js
+|  |  |  ├── UniqueInputFieldNamesRule.d.ts
+|  |  |  ├── UniqueInputFieldNamesRule.js
+|  |  |  ├── UniqueOperationNamesRule.d.ts
+|  |  |  ├── UniqueOperationNamesRule.js
+|  |  |  ├── UniqueOperationTypes.d.ts
+|  |  |  ├── UniqueOperationTypes.js
+|  |  |  ├── UniqueOperationTypesRule.d.ts
+|  |  |  ├── UniqueOperationTypesRule.js
+|  |  |  ├── UniqueTypeNames.d.ts
+|  |  |  ├── UniqueTypeNames.js
+|  |  |  ├── UniqueTypeNamesRule.d.ts
+|  |  |  ├── UniqueTypeNamesRule.js
+|  |  |  ├── UniqueVariableNamesRule.d.ts
+|  |  |  ├── UniqueVariableNamesRule.js
+|  |  |  ├── ValuesOfCorrectTypeRule.d.ts
+|  |  |  ├── ValuesOfCorrectTypeRule.js
+|  |  |  ├── VariablesAreInputTypesRule.d.ts
+|  |  |  ├── VariablesAreInputTypesRule.js
+|  |  |  ├── VariablesInAllowedPositionRule.d.ts
+|  |  |  ├── VariablesInAllowedPositionRule.js
+|  |  |  └── custom
+|  |  |     ├── NoDeprecatedCustomRule.d.ts
+|  |  |     ├── NoDeprecatedCustomRule.js
+|  |  |     ├── NoSchemaIntrospectionCustomRule.d.ts
+|  |  |     └── NoSchemaIntrospectionCustomRule.js
+|  |  ├── specifiedRules.d.ts
+|  |  ├── specifiedRules.js
+|  |  ├── validate.d.ts
+|  |  └── validate.js
+|  ├── version.d.ts
+|  └── version.js
+
+ignored
+
+```
+
+## 外部模块依赖
+
+![img](./outer.svg)
+
+## 内部模块依赖
+
+![img](./inner.svg)
+  
+
+
 # GraphQL.js
 
 The JavaScript reference implementation for GraphQL, a query language for APIs created by Facebook.
